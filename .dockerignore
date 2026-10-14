@@ -1,0 +1,14 @@
+.git
+.venv
+.agents
+tests
+__pycache__
+.pytest_cache
+.ruff_cache
+*.pyc
+Dockerfile
+docker-compose.yml
+.dockerignore
+README.md
+skills-lock.json
+.coverage
