@@ -2,12 +2,14 @@
 
 import logging
 import uuid
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from pdf_validation.checksum import CHECKSUM_ALGORITHM
+from pdf_validation.consul import ConsulRegistration
 from pdf_validation.config import Settings
 from pdf_validation.schemas import (
     ErrorResponse,
@@ -45,6 +47,16 @@ def _error_response(code: str, message: str) -> JSONResponse:
     )
 
 
+@asynccontextmanager
+async def _lifespan(app: FastAPI):
+    consul = ConsulRegistration("pdf-validation", 8000, "/health/ready")
+    await consul.register()
+    try:
+        yield
+    finally:
+        await consul.deregister()
+
+
 def create_app(settings: Settings | None = None) -> FastAPI:
     """Construye la aplicación FastAPI con la configuración indicada.
 
@@ -58,6 +70,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         title="pdf-validation",
         summary="Microservicio de validación de archivos PDF.",
         version="0.1.0",
+        lifespan=_lifespan,
     )
     app.state.settings = settings
     app.add_middleware(RequestIdMiddleware)
