@@ -5,7 +5,7 @@ services:
       - "${PORT:-8000}:8000"
     environment:
       MAX_FILE_SIZE_MIB: "20"
-      CONSUL_HTTP_ADDR: "${CONSUL_HTTP_ADDR:-http://consul:8500}"
+      CONSUL_HTTP_ADDR: "${CONSUL_HTTP_ADDR:-}"
       SERVICE_ADDRESS: "pdf-validation"
     healthcheck:
       test:
