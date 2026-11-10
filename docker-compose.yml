@@ -6,7 +6,6 @@ services:
     environment:
       MAX_FILE_SIZE_MIB: "20"
       CONSUL_HTTP_ADDR: "${CONSUL_HTTP_ADDR:-}"
-      SERVICE_ADDRESS: "pdf-validation"
     healthcheck:
       test:
         [
