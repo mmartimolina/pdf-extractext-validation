@@ -1,8 +1,8 @@
 """Aplicación FastAPI del microservicio de validación de PDF."""
 
 import logging
-from contextlib import asynccontextmanager
 import uuid
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
