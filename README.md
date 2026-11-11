@@ -46,6 +46,8 @@ docker compose up --build
 
 El contenedor corre con usuario no privilegiado (`app`) y escucha siempre en el puerto interno **8000**. La variable `PORT` cambia únicamente el **puerto publicado en el host** (`docker-compose.yml` mapea `${PORT:-8000}:8000`). El contenedor define un `HEALTHCHECK` contra `/health/live`; además, Compose verifica `/health/ready` y reinicia el servicio con política `unless-stopped`.
 
+El servicio se une a la **red externa compartida `pdf-ecosystem-net`**, donde también viven Consul, `extract` (3 réplicas tras Nginx), `pdf-summarize`, `pdf-persistence` y MongoDB. Se registra en Consul de forma **estática** mediante `services.json` (administrado por el servidor Consul, repositorio `pdf-extractext-summarize/infra/consul`), con healthcheck HTTP contra `/health/ready` cada 10 s. No hay registro dinámico desde el código: es un servicio de instancia única.
+
 ## Variables de entorno
 
 | Variable            | Descripción                                  | Predeterminado |
